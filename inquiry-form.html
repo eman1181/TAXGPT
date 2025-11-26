@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>استمارة الاستفسار الضريبي الذكية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 25px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+    }
+    .header {
+      background: linear-gradient(135deg, #003366 0%, #0055aa 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      height: 40px;
+      background: white;
+      border-radius: 50% 50% 0 0;
+    }
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .header p {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+    .form-content {
+      padding: 40px 30px;
+    }
+    .service-info {
+      background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      border-right: 4px solid #00acc1;
+    }
+    .service-info h3 {
+      color: #006064;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+    .service-info p {
+      color: #00838f;
+      margin: 5px 0;
+      font-size: 0.95rem;
+    }
+    .form-group {
+      margin-bottom: 25px;
+    }
+    label {
+      display: block;
+      color: #003366;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    label .required {
+      color: #e53e3e;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: "Cairo", sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      background: white;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+    .file-upload {
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #f7fafc;
+    }
+    .file-upload:hover {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+    .file-upload input {
+      display: none;
+    }
+    .file-upload-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+    .file-list {
+      margin-top: 15px;
+    }
+    .file-item {
+      background: #f0f4f8;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .file-item button {
+      background: #e53e3e;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.3s;
+      margin-top: 20px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .success-message {
+      display: none;
+      background: #d4edda;
+      border: 2px solid #28a745;
+      color: #155724;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .success-message.active {
+      display: block;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      .form-content {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img src="./logo.JPEG" alt="مصلحة الضرائب المصرية" style="height: 30px; margin-top: 10px;" />
+      <h1> استمارة الاستفسار الضريبي</h1>
+      <p>املأ البيانات بدقة وسنقوم بالرد عليك في أقرب وقت</p>
+    </div>
+
+    <div class="form-content">
+      <div class="service-info" id="serviceInfo">
+        <h3>📌 معلومات الخدمة</h3>
+        <p><strong>نوع الخدمة:</strong> <span id="serviceName">-</span></p>
+        <p><strong>نوع الضريبة:</strong> <span id="taxType">-</span></p>
+        <p><strong>الرقم المرجعي:</strong> <span id="refNumber">-</span></p>
+      </div>
+
+      <form id="taxForm">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>رقم التسجيل <span class="required">*</span></label>
+            <input type="text" id="regNumber" placeholder="123456789" required />
+          </div>
+
+          <div class="form-group">
+            <label>الاسم الكامل <span class="required">*</span></label>
+            <input type="text" id="fullName" placeholder="أحمد محمد علي" required />
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>رقم الموبايل <span class="required">*</span></label>
+            <input type="tel" id="mobile" placeholder="01XXXXXXXXX" required />
+          </div>
+
+          <div class="form-group">
+            <label>البريد الإلكتروني <span class="required">*</span></label>
+            <input type="email" id="email" placeholder="example@email.com" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>نوع الضريبة <span class="required">*</span></label>
+          <select id="taxCategory" required>
+            <option value="">-- اختر نوع الضريبة --</option>
+            <option value="vat">ضريبة القيمة المضافة (VAT)</option>
+            <option value="income">ضريبة الدخل</option>
+            <option value="corporate">ضريبة الشركات</option>
+            <option value="stamp">ضريبة الدمغة</option>
+            <option value="withholding">الخصم والإضافة</option>
+            <option value="customs">الجمارك</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>تصنيف الاستفسار <span class="required">*</span></label>
+          <select id="inquiryType" required>
+            <option value="">-- اختر التصنيف --</option>
+            <option value="registration">التسجيل الضريبي</option>
+            <option value="returns">الإقرارات الضريبية</option>
+            <option value="refund">رد الضريبة</option>
+            <option value="exemption">الإعفاءات</option>
+            <option value="penalties">الغرامات والجزاءات</option>
+            <option value="calculation">حساب الضريبة</option>
+            <option value="objection">الاعتراض على ربط</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>نص الاستفسار <span class="required">*</span></label>
+          <textarea id="inquiryText" placeholder="اكتب استفسارك بالتفصيل..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>مرفق الاستفسار (PDF, Word, صورة)</label>
+          <div class="file-upload" onclick="document.getElementById('mainFile').click()">
+            <div class="file-upload-icon">📄</div>
+            <p><strong>اضغط لرفع الملف الرئيسي</strong></p>
+            <p style="font-size: 0.85rem; color: #718096; margin-top: 5px;">حجم الملف الأقصى: 10 ميجابايت</p>
+            <input type="file" id="mainFile" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleMainFile(event)" />
+          </div>
+          <div id="mainFilePreview" class="file-list"></div>
+        </div>
+
+        <div class="form-group">
+          <label>مرفقات إضافية (اختياري)</label>
+          <div class="file-upload" onclick="document.getElementById('additionalFiles').click()">
+            <div class="file-upload-icon">📎</div>
+            <p><strong>اضغط لرفع ملفات إضافية</strong></p>
+            <p style="font-size: 0.85rem; color: #718096; margin-top: 5px;">يمكنك رفع عدة ملفات</p>
+            <input type="file" id="additionalFiles" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleAdditionalFiles(event)" />
+          </div>
+          <div id="additionalFilesPreview" class="file-list"></div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          🚀 إرسال الاستفسار
+        </button>
+
+        <div class="success-message" id="successMessage">
+          <h3 style="color: #28a745; margin-bottom: 10px;">✅ تم إرسال الاستفسار بنجاح!</h3>
+          <p>رقم المتابعة: <strong id="trackingNumber"></strong></p>
+          <p style="margin-top: 10px;">سيتم التواصل معك خلال 24-48 ساعة</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // قراءة البيانات من الـ URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('service')) {
+      document.getElementById('serviceName').textContent = urlParams.get('service');
+      document.getElementById('taxType').textContent = getTaxName(urlParams.get('tax'));
+      document.getElementById('refNumber').textContent = urlParams.get('ref');
+      
+      // ملء نوع الضريبة تلقائيًا
+      document.getElementById('taxCategory').value = urlParams.get('tax');
+    }
+
+    function getTaxName(code) {
+      const names = {
+        'vat': 'ضريبة القيمة المضافة',
+        'income': 'ضريبة الدخل',
+        'corporate': 'ضريبة الشركات',
+        'stamp': 'ضريبة الدمغة',
+        'withholding': 'الخصم والإضافة',
+        'customs': 'الجمارك',
+        'other': 'أخرى'
+      };
+      return names[code] || code;
+    }
+
+    let mainFile = null;
+    let additionalFiles = [];
+
+    function handleMainFile(event) {
+      const file = event.target.files[0];
+      if (file) {
+        mainFile = file;
+        displayMainFile(file);
+      }
+    }
+
+    function displayMainFile(file) {
+      const preview = document.getElementById('mainFilePreview');
+      preview.innerHTML = `
+        <div class="file-item">
+          <span>📄 ${file.name} (${formatFileSize(file.size)})</span>
+          <button type="button" onclick="removeMainFile()">حذف</button>
+        </div>
+      `;
+    }
+
+    function removeMainFile() {
+      mainFile = null;
+      document.getElementById('mainFile').value = '';
+      document.getElementById('mainFilePreview').innerHTML = '';
+    }
+
+    function handleAdditionalFiles(event) {
+      const files = Array.from(event.target.files);
+      additionalFiles = [...additionalFiles, ...files];
+      displayAdditionalFiles();
+    }
+
+    function displayAdditionalFiles() {
+      const preview = document.getElementById('additionalFilesPreview');
+      preview.innerHTML = additionalFiles.map((file, index) => `
+        <div class="file-item">
+          <span>📎 ${file.name} (${formatFileSize(file.size)})</span>
+          <button type="button" onclick="removeAdditionalFile(${index})">حذف</button>
+        </div>
+      `).join('');
+    }
+
+    function removeAdditionalFile(index) {
+      additionalFiles.splice(index, 1);
+      displayAdditionalFiles();
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    document.getElementById('taxForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ جاري الإرسال...';
+
+      // جمع البيانات
+      const formData = new FormData();
+      formData.append('regNumber', document.getElementById('regNumber').value);
+      formData.append('fullName', document.getElementById('fullName').value);
+      formData.append('mobile', document.getElementById('mobile').value);
+      formData.append('email', document.getElementById('email').value);
+      formData.append('taxCategory', document.getElementById('taxCategory').value);
+      formData.append('inquiryType', document.getElementById('inquiryType').value);
+      formData.append('inquiryText', document.getElementById('inquiryText').value);
+      formData.append('refNumber', urlParams.get('ref') || 'N/A');
+
+      if (mainFile) formData.append('mainFile', mainFile);
+      additionalFiles.forEach((file, i) => formData.append(`additionalFile${i}`, file));
+
+      try {
+        // إرسال للـ Backend
+        const response = await fetch('http://127.0.0.1:5000/submit-inquiry', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // إظهار رسالة النجاح
+          document.getElementById('trackingNumber').textContent = result.trackingNumber;
+          document.getElementById('successMessage').classList.add('active');
+          document.getElementById('taxForm').style.display = 'none';
+        } else {
+          alert('❌ حدث خطأ: ' + result.message);
+        }
+      } catch (error) {
+        alert('❌ حدث خطأ في الاتصال بالخادم');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '🚀 إرسال الاستفسار';
+      }
+    });
+  </script>
+</body>
+</html>
