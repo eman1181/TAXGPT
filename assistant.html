@@ -41,7 +41,7 @@
       border-radius: 15px;
       box-shadow: 0 6px 20px rgba(0,0,0,0.1);
       width: 90%;
-      max-width: 450px;
+      max-width: 700px;
       padding: 2rem;
       text-align: center;
     }
@@ -67,7 +67,7 @@
       border-radius: 10px;
       padding: 10px;
       text-align: right;
-      height: 300px;
+      height: 260px;
       overflow-y: auto;
       margin-bottom: 10px;
     }
@@ -77,19 +77,38 @@
       border-radius: 8px;
       max-width: 90%;
       line-height: 1.4;
+      text-align: right;
     }
     .user {
       background: #ffcc00;
       color: #003366;
+      margin-left: auto;
     }
     .bot {
       background: rgba(0,0,0,0.1);
+      color: #003366;
+      margin-right: auto;
     }
     footer {
       background: #002244;
       color: #d1d5db;
       padding: 20px 0;
       text-align: center;
+    }
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .btn-row button {
+      width: 50%;
+    }
+    #statusText {
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-align: right;
+      margin-top: 4px;
+      min-height: 1em;
     }
   </style>
 </head>
@@ -98,7 +117,6 @@
     <div class="container">
       <a class="navbar-brand" href="index.html">
         <img src="logo.jpeg" alt="شعار مصلحة الضرائب المصرية" />
-
       </a>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav me-auto">
@@ -113,6 +131,7 @@
   </nav>
 
   <section class="assistant-container">
+    <!-- صفحة تسجيل الدخول -->
     <div id="loginPage" class="card">
       <h3>تسجيل الدخول</h3>
       <input type="email" id="email" placeholder="البريد الإلكتروني" />
@@ -120,15 +139,37 @@
       <button id="loginBtn">دخول</button>
     </div>
 
+    <!-- صفحة المحادثة + الخطاب -->
     <div id="chatPage" class="card" style="display:none;">
       <h3>TaxGPT</h3>
       <div id="chatBox" class="chat-box"></div>
-      <textarea id="userInput" placeholder="اكتب سؤالك هنا..." rows="1"></textarea>
+
+      <textarea id="userInput" placeholder="اكتب سؤالك هنا..." rows="2"></textarea>
       <input type="file" id="fileInput" accept=".pdf,.docx,.txt" style="display:none;" />
-      <div style="display:flex; gap:10px;">
-        <button id="sendBtn">إرسال</button>
+
+      <div class="btn-row">
+        <button id="sendBtn">إرسال السؤال</button>
         <button id="uploadBtn">📁 رفع ملف</button>
       </div>
+
+      <hr />
+
+      <!-- ✅ منطقة الخطاب القابل للتعديل + تحميل Word -->
+      <label for="letterArea" class="w-100 text-end fw-bold mb-0">
+        نص الخطاب الناتج (قابل للتعديل):
+      </label>
+      <textarea id="letterArea" rows="8" placeholder="سيظهر هنا نص الخطاب القانوني التفصيلي بعد توليده..."></textarea>
+      <button id="downloadLetterBtn">تحميل الخطاب كملف Word</button>
+      <div id="statusText"></div>
+
+      <!-- ⬇⬇⬇ قسم التقييم الجديد ⬇⬇⬇ -->
+      <div id="feedbackSection" style="display:none; text-align:right; margin-top:10px;">
+        <span>كيف تقيم دقة هذا الرد؟</span>
+        <button id="fbGood" style="width:auto; margin-inline:5px;">👍 مفيد</button>
+        <button id="fbBad" style="width:auto; margin-inline:5px;">👎 غير دقيق</button>
+        <span id="feedbackStatus" style="font-size:0.8rem; color:#6b7280; margin-right:8px;"></span>
+      </div>
+
     </div>
   </section>
 
@@ -139,6 +180,9 @@
   </footer>
 
   <script>
+    // 🔗 عنوان الـ API الخاص بـ FastAPI
+    const API_BASE = "http://localhost:8000";
+
     const loginPage = document.getElementById("loginPage");
     const chatPage = document.getElementById("chatPage");
     const loginBtn = document.getElementById("loginBtn");
@@ -148,18 +192,35 @@
     const fileInput = document.getElementById("fileInput");
     const uploadBtn = document.getElementById("uploadBtn");
 
+    const letterArea = document.getElementById("letterArea");
+    const downloadLetterBtn = document.getElementById("downloadLetterBtn");
+    const statusText = document.getElementById("statusText");
+    const feedbackSection = document.getElementById("feedbackSection");
+    const fbGood = document.getElementById("fbGood");
+    const fbBad = document.getElementById("fbBad");
+    const feedbackStatus = document.getElementById("feedbackStatus");
+
+    let lastQuestion = null;
+    let lastAnswer = null;
+
+
+    // ----------------- تسجيل الدخول البسيط -----------------
     loginBtn.onclick = () => {
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-      if ((email === "admin@example.com" && password === "1234") || (email === "user@eta.gov.eg" && password === "5678")) {
+      if (
+        (email === "admin@example.com" && password === "1234") ||
+        (email === "user@eta.gov.eg" && password === "5678")
+      ) {
         loginPage.style.display = "none";
         chatPage.style.display = "block";
-        chatBox.innerHTML = `<div class='message bot'>مرحبًا ${email.split('@')[0]} 👋! كيف يمكنني مساعدتك اليوم؟</div>`;
+        addMessage(`مرحبًا ${email.split("@")[0]} 👋! كيف يمكنني مساعدتك اليوم؟`, "bot");
       } else {
         alert("❌ البريد الإلكتروني أو كلمة المرور غير صحيحة");
       }
     };
 
+    // ----------------- إرسال السؤال -----------------
     sendBtn.onclick = sendMessage;
     userInput.addEventListener("keydown", e => {
       if (e.key === "Enter" && !e.shiftKey) {
@@ -168,54 +229,190 @@
       }
     });
 
-    function sendMessage() {
+    async function sendMessage() {
       const text = userInput.value.trim();
       if (!text) return;
+
+      // أضف رسالة المستخدم في الشات
       addMessage(text, "user");
       userInput.value = "";
-      let reply = "";
-      if (text.includes("ضريبة")) reply = "💰 الضريبة هي مورد أساسي لميزانية الدولة.";
-      else if (text.includes("تسجيل")) reply = "🔑 يمكنك التسجيل عبر بوابة الممول على موقع المصلحة.";
-      else reply = "🤖 جاري تطوير قاعدة المعرفة للإجابة على سؤالك.";
-      setTimeout(() => addMessage(reply, "bot"), 1000);
+
+      // أضف رسالة تفيد أن النظام يعمل على توليد الخطاب
+      addMessage("⏳ جاري إعداد خطاب ضريبي قانوني مفصل بناءً على سؤالك...", "bot");
+      statusText.textContent = "جاري توليد الخطاب من الخادم...";
+
+      try {
+        const res = await fetch(`${API_BASE}/tax-answer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: text, top_k: 5 }),
+        });
+
+        if (!res.ok) {
+          let errText = "حدث خطأ أثناء توليد الخطاب.";
+          try {
+            const errData = await res.json();
+            if (errData.detail) errText = errData.detail;
+          } catch (_) {}
+          addMessage("❌ " + errText, "bot");
+          statusText.textContent = errText;
+          return;
+        }
+
+        const data = await res.json();
+        const answer = data.answer || "";
+
+        // ضع نص الخطاب في الصندوق القابل للتعديل
+        letterArea.value = answer;
+
+        addMessage("✅ تم إعداد خطاب ضريبي تفصيلي. يمكنك مراجعته وتعديله في الصندوق أسفل المحادثة.", "bot");
+        statusText.textContent = "تم التوليد بنجاح. عدّل النص كما تشاء ثم اضغط تحميل كملف Word.";
+        // تخزين آخر سؤال وآخر جواب عشان التقييم
+        lastQuestion = text;
+        lastAnswer = answer;
+
+        // إظهار قسم التقييم
+        feedbackSection.style.display = "block";
+        feedbackStatus.textContent = "";
+
+      } catch (e) {
+        console.error(e);
+        addMessage("❌ حدث خطأ في الاتصال بالخادم.", "bot");
+        statusText.textContent = "فشل الاتصال بالخادم.";
+      }
+    }
+    async function sendFeedback(rating) {
+  if (!lastQuestion || !lastAnswer) {
+    alert("لا يوجد رد لتقييمه حتى الآن.");
+    return;
+  }
+
+  // النص بعد التعديل من الـ textarea
+  const edited = letterArea.value.trim();
+
+  feedbackStatus.textContent = "⏳ جاري تسجيل التقييم...";
+  try {
+    const res = await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question: lastQuestion,
+        original_answer: lastAnswer,          // رد الموديل الأصلي
+        edited_answer: edited || null,        // اللي اليوزر كتبه بعد التعديل
+        rating: rating,
+        comment: null
+      }),
+    });
+
+    if (!res.ok) {
+      feedbackStatus.textContent = "لم يتم حفظ التقييم.";
+      return;
     }
 
-    // ✅ رفع ملف وتحليل محتواه
-uploadBtn.onclick = () => fileInput.click();
+    feedbackStatus.textContent = "✅ تم تسجيل تقييمك. شكرًا لكِ.";
+  } catch (err) {
+    console.error(err);
+    feedbackStatus.textContent = "تعذر إرسال التقييم.";
+  }
+}
 
 
-fileInput.onchange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  addMessage(`📤 تم رفع الملف: ${file.name}`, "user");
+fbGood.onclick = () => sendFeedback(1);
+fbBad.onclick = () => sendFeedback(0);
 
-  const formData = new FormData();
-  formData.append("file", file);
+    
+   // ----------------- تحميل الخطاب كملف Word -----------------
+downloadLetterBtn.onclick = async () => {
+  const text = letterArea.value.trim();
+  if (!text) {
+    alert("لا يوجد نص خطاب لتحميله. من فضلك قم بالتوليد أو اكتب نصًا.");
+    return;
+  }
 
-  addMessage("⏳ جاري تحليل الملف، من فضلك انتظر...", "bot");
+  statusText.textContent = "⏳ جاري تجهيز ملف Word...";
+  downloadLetterBtn.disabled = true;
 
-  const res = await fetch("http://127.0.0.1:5000/upload", {
-    method: "POST",
-    body: formData
-  });
-  const data = await res.json();
+  try {
+    const res = await fetch(`${API_BASE}/export-docx`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: text, // 👈 ده اللي الباك إند مستنيه
+      }),
+    });
 
-  if (data.error) {
-    addMessage("❌ حدث خطأ أثناء رفع الملف.", "bot");
-  } else {
-    addMessage(data.message, "bot");
-    addMessage(`📄 نص مستخرج:\n${data.preview}`, "bot");
+    if (!res.ok) {
+      let errText = "فشل إنشاء ملف Word.";
+      try {
+        const errData = await res.json();
+        if (errData.detail) errText = errData.detail;
+      } catch (_) {}
+      statusText.textContent = errText;
+      alert(errText);
+      return;
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tax_letter.docx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+
+    statusText.textContent = "✅ تم تحميل الملف بنجاح.";
+  } catch (e) {
+    console.error(e);
+    statusText.textContent = "حدث خطأ أثناء تحميل الملف.";
+    alert("حدث خطأ أثناء تحميل الملف.");
+  } finally {
+    downloadLetterBtn.disabled = false;
   }
 };
-// === Helper function to show messages in the chat ===
-function addMessage(text, sender = "bot") {
-  const chatBox = document.getElementById("chatBox");
-  const msg = document.createElement("div");
-  msg.classList.add("message", sender);
-  msg.textContent = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+
+
+    // ----------------- رفع ملف (ما زال يستخدم backend منفصل على :5000) -----------------
+    uploadBtn.onclick = () => fileInput.click();
+
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      addMessage(`📤 تم رفع الملف: ${file.name}`, "user");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      addMessage("⏳ جاري تحليل الملف، من فضلك انتظر...", "bot");
+
+      try {
+        const res = await fetch("http://127.0.0.1:5000/upload", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.error) {
+          addMessage("❌ حدث خطأ أثناء رفع الملف.", "bot");
+        } else {
+          addMessage(data.message, "bot");
+          addMessage(`📄 نص مستخرج:\n${data.preview}`, "bot");
+        }
+      } catch (err) {
+        console.error(err);
+        addMessage("❌ فشل الاتصال بخادم رفع الملفات.", "bot");
+      }
+    };
+
+    // ----------------- دالة مساعدة لإضافة رسائل في الشات -----------------
+    function addMessage(text, sender = "bot") {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
   </script>
 </body>
