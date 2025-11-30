@@ -110,6 +110,17 @@
       margin-top: 4px;
       min-height: 1em;
     }
+    .star {
+  opacity: 0.3;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+.star.selected {
+  opacity: 1;
+}
+.star:hover {
+  transform: scale(1.1);
+}
+
   </style>
 </head>
 <body>
@@ -162,13 +173,33 @@
       <button id="downloadLetterBtn">تحميل الخطاب كملف Word</button>
       <div id="statusText"></div>
 
-      <!-- ⬇⬇⬇ قسم التقييم الجديد ⬇⬇⬇ -->
-      <div id="feedbackSection" style="display:none; text-align:right; margin-top:10px;">
-        <span>كيف تقيم دقة هذا الرد؟</span>
-        <button id="fbGood" style="width:auto; margin-inline:5px;">👍 مفيد</button>
-        <button id="fbBad" style="width:auto; margin-inline:5px;">👎 غير دقيق</button>
-        <span id="feedbackStatus" style="font-size:0.8rem; color:#6b7280; margin-right:8px;"></span>
-      </div>
+         <!-- ⬇⬇⬇ قسم التقييم بالنجوم ⬇⬇⬇ -->
+         <div id="feedbackSection" style="display:none; text-align:right; margin-top:10px;">
+          <label for="ratingStars" class="w-100 fw-bold mb-1">
+            كيف تقيم دقة هذا الرد؟
+          </label>
+  
+          <div id="ratingStars" style="direction:ltr; font-size:24px; cursor:pointer;">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+          </div>
+  
+          <input type="hidden" id="ratingValue" value="0" />
+  
+          <small style="display:block; margin-top:5px;">
+            1 = سيئ جدًا &nbsp;&nbsp; 5 = ممتاز
+          </small>
+  
+          <button id="sendFeedbackBtn" style="width:auto; margin-top:8px;">
+            إرسال التقييم
+          </button>
+  
+          <span id="feedbackStatus" style="display:block; font-size:0.8rem; color:#6b7280; margin-top:4px;"></span>
+        </div>
+  
 
     </div>
   </section>
@@ -195,10 +226,13 @@
     const letterArea = document.getElementById("letterArea");
     const downloadLetterBtn = document.getElementById("downloadLetterBtn");
     const statusText = document.getElementById("statusText");
+
     const feedbackSection = document.getElementById("feedbackSection");
-    const fbGood = document.getElementById("fbGood");
-    const fbBad = document.getElementById("fbBad");
     const feedbackStatus = document.getElementById("feedbackStatus");
+    const stars = document.querySelectorAll("#ratingStars .star");
+    const ratingInput = document.getElementById("ratingValue");
+    const sendFeedbackBtn = document.getElementById("sendFeedbackBtn");
+
 
     let lastQuestion = null;
     let lastAnswer = null;
@@ -281,44 +315,71 @@
         statusText.textContent = "فشل الاتصال بالخادم.";
       }
     }
-    async function sendFeedback(rating) {
-  if (!lastQuestion || !lastAnswer) {
-    alert("لا يوجد رد لتقييمه حتى الآن.");
-    return;
-  }
+        // ----------------- إرسال التقييم إلى الباك إند -----------------
+        async function sendFeedback(rating) {
+      if (!lastQuestion || !lastAnswer) {
+        alert("لا يوجد رد لتقييمه حتى الآن.");
+        return;
+      }
 
-  // النص بعد التعديل من الـ textarea
-  const edited = letterArea.value.trim();
+      // النص بعد التعديل من الـ textarea
+      const edited = letterArea.value.trim();
 
-  feedbackStatus.textContent = "⏳ جاري تسجيل التقييم...";
-  try {
-    const res = await fetch(`${API_BASE}/feedback`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        question: lastQuestion,
-        original_answer: lastAnswer,          // رد الموديل الأصلي
-        edited_answer: edited || null,        // اللي اليوزر كتبه بعد التعديل
-        rating: rating,
-        comment: null
-      }),
-    });
+      feedbackStatus.textContent = "⏳ جاري تسجيل التقييم...";
+      try {
+        const res = await fetch(`${API_BASE}/feedback`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: lastQuestion,
+            original_answer: lastAnswer,   // رد الموديل الأصلي
+            edited_answer: edited || null, // اللي اليوزر كتبه بعد التعديل
+            rating: rating,                // رقم من 1 لـ 5
+            comment: null
+          }),
+        });
 
-    if (!res.ok) {
-      feedbackStatus.textContent = "لم يتم حفظ التقييم.";
-      return;
+        if (!res.ok) {
+          feedbackStatus.textContent = "لم يتم حفظ التقييم.";
+          return;
+        }
+
+        feedbackStatus.textContent = "✅ تم تسجيل تقييمك. شكرًا لكِ.";
+      } catch (err) {
+        console.error(err);
+        feedbackStatus.textContent = "تعذر إرسال التقييم.";
+      }
     }
 
-    feedbackStatus.textContent = "✅ تم تسجيل تقييمك. شكرًا لكِ.";
-  } catch (err) {
-    console.error(err);
-    feedbackStatus.textContent = "تعذر إرسال التقييم.";
-  }
-}
+    // -------- منطق اختيار النجوم + ربطها بدالة sendFeedback --------
+    function updateStars(selectedValue) {
+      stars.forEach(star => {
+        const value = parseInt(star.getAttribute("data-value"));
+        if (value <= selectedValue) {
+          star.classList.add("selected");
+        } else {
+          star.classList.remove("selected");
+        }
+      });
+    }
 
+    stars.forEach(star => {
+      star.addEventListener("click", function () {
+        const value = parseInt(this.getAttribute("data-value"));
+        ratingInput.value = value;
+        updateStars(value);
+      });
+    });
 
-fbGood.onclick = () => sendFeedback(1);
-fbBad.onclick = () => sendFeedback(0);
+    sendFeedbackBtn.addEventListener("click", function () {
+      const rating = parseInt(ratingInput.value || "0", 10);
+      if (!rating || rating < 1) {
+        feedbackStatus.textContent = "من فضلك اختر عدد النجوم أولاً.";
+        return;
+      }
+      sendFeedback(rating);
+    });
+
 
     
    // ----------------- تحميل الخطاب كملف Word -----------------

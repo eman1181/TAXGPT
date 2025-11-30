@@ -10,6 +10,10 @@
 
 
 # In[3]:
+
+import json
+import re
+
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -265,33 +269,53 @@ def generate_json_reasoning(prompt, max_new_tokens=700):
 # In[15]:
 
 
-def clean_and_parse_json(raw_output):
+def clean_and_parse_json(raw_output: str):
     """
-    Extract ONLY the LAST JSON object from the model output.
-    This avoids schema-echo issues where the model prints two JSON blocks.
+    تحاول استخراج آخر JSON من مخرجات الموديل.
+    لو فشلنا في القراءة، نرجع ديكشنري افتراضي بدل ما نوقع السيرفر.
     """
 
-    # Find ALL JSON objects in the output
+    # نجيب كل الـ JSON objects في النص
     matches = re.findall(r"\{.*?\}", raw_output, re.DOTALL)
 
+    # لو مفيش JSON خالص
     if not matches:
+        print("⚠️ No JSON object found in model output. Using raw text as analysis.")
         print("RAW OUTPUT:\n", raw_output)
-        raise ValueError("No JSON object found.")
+        return {
+            "issue_type": "غير محدد (لم يتم العثور على JSON صالح)",
+            "question_understanding": "غير متوفر",
+            "legal_basis": [],
+            "analysis": raw_output,
+            "application": "غير متوفر",
+            "calculation": "غير متوفر",
+            "conclusion": "غير متوفر",
+        }
 
-    # The REAL JSON is ALWAYS the last object
+    # ناخد آخر واحد (غالبًا هو الصح)
     json_str = matches[-1]
 
-    # Clean
+    # تنظيف بسيط
     json_str = json_str.replace("\n", " ").replace("\t", " ")
-    json_str = re.sub(r",\s*}", "}", json_str)  # remove trailing commas
+    json_str = re.sub(r",\s*}", "}", json_str)  # إزالة الكوما الزايدة قبل }
 
     try:
         return json.loads(json_str)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
         print("\n--- JSON PARSE FAILED ---")
-        print(json_str)
-        raise
-
+        print("Error:", e)
+        print("CLEANED JSON STRING:\n", json_str)
+        print("RAW OUTPUT:\n", raw_output)
+        # Fallback آمن عشان البرنامج ما يقعش
+        return {
+            "issue_type": "غير محدد (خطأ في تنسيق JSON)",
+            "question_understanding": "غير متوفر",
+            "legal_basis": [],
+            "analysis": raw_output,
+            "application": "غير متوفر",
+            "calculation": "غير متوفر",
+            "conclusion": "غير متوفر",
+        }
 
 
 
