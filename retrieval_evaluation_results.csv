@@ -1,0 +1,101 @@
+﻿id,question,expected_source,top_1_source,hit_at_5,retrieved_sources
+1,ما هو المقصود بنسبة 0.0025 المقررة بالمادة 40 من قانون التأمين الصحي الشامل؟,health_contribution,fatwa,False,fatwa | income_tax | income_tax | income_tax | income_tax
+2,ما هي المساهمة التكافلية في قانون التأمين الصحي الشامل؟,health_contribution,fatwa,False,fatwa | law_2025 | fatwa | income_tax | fatwa
+3,على من تطبق نسبة المساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+4,كيف يتم حساب النسبة المقررة للتأمين الصحي الشامل؟,health_contribution,fatwa,False,fatwa | fatwa | law_2025 | fatwa | fatwa
+5,ما الأساس القانوني للمساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | law_2025 | fatwa | fatwa | fatwa
+6,هل نسبة 0.0025 تعتبر ضريبة أم مساهمة؟,health_contribution,fatwa,False,fatwa | income_tax | income_tax | income_tax | income_tax
+7,ما علاقة المادة 40 بالتأمين الصحي الشامل؟,health_contribution,income_tax,False,income_tax | income_tax | income_tax | income_tax | fatwa
+8,ما المقصود بصافي الإيرادات عند حساب مساهمة التأمين الصحي؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+9,هل تطبق مساهمة التأمين الصحي الشامل على جميع المنشآت؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+10,ما طريقة توريد المساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | income_tax | law_2025 | fatwa | fatwa
+11,هل توجد إعفاءات من المساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | law_2025 | income_tax
+12,ما الجهة المختصة بتحصيل مساهمة التأمين الصحي الشامل؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+13,ما الفرق بين الضريبة والمساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | income_tax | income_tax
+14,كيف تفسر مصلحة الضرائب نسبة 0.0025؟,health_contribution,fatwa,False,fatwa | income_tax | income_tax | income_tax | income_tax
+15,هل المساهمة التكافلية تخص الأشخاص الطبيعيين أم الاعتباريين؟,health_contribution,fatwa,False,fatwa | law_2025 | fatwa | income_tax | fatwa
+16,هل يتم حساب مساهمة التأمين الصحي على الأرباح أم الإيرادات؟,health_contribution,fatwa,False,fatwa | fatwa | law_2025 | fatwa | income_tax
+17,ما هو نطاق تطبيق قانون التأمين الصحي الشامل؟,health_contribution,fatwa,False,fatwa | law_2025 | income_tax | fatwa | fatwa
+18,هل المساهمة التكافلية واجبة السداد سنوياً؟,health_contribution,fatwa,False,fatwa | law_2025 | fatwa | income_tax | fatwa
+19,ما أثر عدم سداد مساهمة التأمين الصحي؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+20,ما النص القانوني المرتبط بالمساهمة التكافلية؟,health_contribution,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+21,ما المقصود بضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+22,من هو الممول في قانون ضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+23,ما هي الإيرادات الخاضعة لضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+24,كيف يتم تحديد وعاء ضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+25,ما هي الأرباح التجارية والصناعية؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+26,ما المعاملة الضريبية للأشخاص الاعتباريين؟,income_tax,fatwa,True,fatwa | income_tax | fatwa | fatwa | fatwa
+27,ما المقصود بصافي الربح الخاضع للضريبة؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+28,ما هي التكاليف واجبة الخصم؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+29,ما الشروط العامة لخصم المصروفات؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+30,ما هي الإعفاءات في قانون ضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+31,كيف يتم التعامل مع الخسائر الضريبية؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | law_2025 | fatwa
+32,ما هي أرباح المهن غير التجارية؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+33,ما المقصود بالإقرار الضريبي؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+34,ما هي مواعيد تقديم الإقرار الضريبي؟,income_tax,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+35,ما الجزاء عند عدم تقديم الإقرار الضريبي؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+36,ما هي الضريبة على المرتبات؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+37,كيف يتم حساب الضريبة على الأشخاص الطبيعيين؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+38,ما المقصود بسعر الضريبة؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+39,ما هي الضريبة المستحقة؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+40,ما الفرق بين الإيراد والربح الخاضع للضريبة؟,income_tax,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+41,ما المقصود بالخصم تحت حساب الضريبة؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+42,ما هي الالتزامات الضريبية على الشركات؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+43,هل المصروفات الشخصية تخصم من الوعاء الضريبي؟,income_tax,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+44,ما هي المستندات المطلوبة لإثبات المصروفات؟,income_tax,fatwa,False,fatwa | fatwa | law_2025 | fatwa | fatwa
+45,ما المقصود بالفحص الضريبي؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+46,ما هي حالات التهرب الضريبي؟,income_tax,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+47,ما هي العقوبات في قانون ضريبة الدخل؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+48,ما المقصود بالضريبة القطعية؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+49,ما هي المعاملة الضريبية للتوزيعات؟,income_tax,fatwa,False,fatwa | fatwa | law_2025 | fatwa | fatwa
+50,ما المقصود بالأرباح الرأسمالية؟,income_tax,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+51,ما هي التعليمات الضريبية الصادرة سنة 2012؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+52,ما الهدف من تعليمات 2012؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+53,كيف يتم تطبيق التعليمات الضريبية لسنة 2012؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+54,هل تعليمات 2012 ملزمة للمأموريات؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+55,ما أثر تعليمات 2012 على الفحص الضريبي؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+56,ما هي الحالات التي تناولتها تعليمات 2012؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+57,كيف فسرت التعليمات الضريبية بعض أحكام القانون؟,instructions_2012,fatwa,False,fatwa | fatwa | fatwa | fatwa | law_2025
+58,ما علاقة تعليمات 2012 بضريبة الدخل؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+59,هل تعليمات 2012 تتعلق بالمحاسبة الضريبية؟,instructions_2012,income_tax,True,income_tax | income_tax | income_tax | instructions_2012 | income_tax
+60,ما دور التعليمات التنفيذية في توحيد العمل الضريبي؟,instructions_2012,fatwa,False,fatwa | fatwa | fatwa | fatwa | income_tax
+61,ما المقصود بالتعليمات التنفيذية في الضرائب؟,instructions_2012,fatwa,False,fatwa | fatwa | fatwa | fatwa | fatwa
+62,هل يجوز الاستناد إلى تعليمات 2012 في الرد على الاستفسارات؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+63,ما الفرق بين القانون والتعليمات التنفيذية؟,instructions_2012,fatwa,False,fatwa | law_2025 | fatwa | fatwa | fatwa
+64,كيف تساعد تعليمات 2012 في تفسير النصوص الضريبية؟,instructions_2012,income_tax,False,income_tax | income_tax | income_tax | income_tax | income_tax
+65,ما الجهة التي تصدر التعليمات الضريبية؟,instructions_2012,fatwa,False,fatwa | fatwa | income_tax | fatwa | fatwa
+66,ما هي الفتوى الضريبية المتعلقة بالقيمة المضافة؟,fatwa,fatwa,True,fatwa | fatwa | income_tax | fatwa | fatwa
+67,هل توجد فتوى بشأن خصم الضريبة تحت حساب الضريبة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | income_tax | income_tax
+68,ما رأي الفتوى في المعاملة الضريبية للخدمات؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | income_tax | fatwa
+69,كيف ترد الفتوى الضريبية على استفسارات الممولين؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | income_tax | fatwa
+70,ما الفتوى الخاصة بضريبة القيمة المضافة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+71,هل الفتاوى الضريبية ملزمة في التطبيق؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | income_tax | fatwa
+72,ما دور الفتوى الضريبية في تفسير القانون؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+73,كيف يتم استخدام الفتوى في الرد الرسمي؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | law_2025
+74,ما المقصود بالاستفسار في جدول الفتاوى؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | law_2025
+75,ما المقصود بالرد على الاستفسار في الفتوى؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+76,هل توجد فتوى عن توريد الخدمات؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+77,هل توجد فتوى عن خصم ضريبة القيمة المضافة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+78,ما الفتوى المتعلقة بالتسجيل في ضريبة القيمة المضافة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+79,ما الفتوى الخاصة بالفواتير الضريبية؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+80,ما الفتوى المتعلقة بالخدمات المعفاة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+81,ما الفتوى المتعلقة بالسلع الخاضعة للضريبة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | income_tax
+82,هل توجد فتوى عن رد الضريبة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+83,ما الفتوى الخاصة بالمقاولات؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+84,هل توجد فتوى عن النشاط التجاري والقيمة المضافة؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | fatwa | fatwa
+85,ما الفتوى المتعلقة بالممولين المسجلين؟,fatwa,fatwa,True,fatwa | fatwa | fatwa | law_2025 | fatwa
+86,ما أهم الأحكام الواردة في قانون 2025؟,law_2025,law_2025,True,law_2025 | income_tax | health_contribution | income_tax | income_tax
+87,ما الهدف من القانون الصادر سنة 2025؟,law_2025,income_tax,True,income_tax | law_2025 | income_tax | health_contribution | income_tax
+88,ما نطاق تطبيق قانون 2025؟,law_2025,income_tax,True,income_tax | income_tax | health_contribution | law_2025 | income_tax
+89,ما الالتزامات التي يفرضها قانون 2025؟,law_2025,law_2025,True,law_2025 | income_tax | health_contribution | income_tax | income_tax
+90,هل يتضمن قانون 2025 تعديلات ضريبية؟,law_2025,law_2025,True,law_2025 | health_contribution | income_tax | income_tax | income_tax
+91,ما أثر قانون 2025 على الممولين؟,law_2025,income_tax,True,income_tax | law_2025 | income_tax | health_contribution | income_tax
+92,ما المواد الرئيسية في قانون 2025؟,law_2025,law_2025,True,law_2025 | income_tax | health_contribution | income_tax | income_tax
+93,كيف يطبق قانون 2025 على الحالات الضريبية؟,law_2025,law_2025,True,law_2025 | health_contribution | income_tax | income_tax | income_tax
+94,ما العلاقة بين قانون 2025 والقوانين الضريبية الأخرى؟,law_2025,law_2025,True,law_2025 | health_contribution | income_tax | income_tax | income_tax
+95,هل توجد أحكام انتقالية في قانون 2025؟,law_2025,law_2025,True,law_2025 | health_contribution | income_tax | income_tax | income_tax
+96,ما العقوبات أو الجزاءات في قانون 2025؟,law_2025,law_2025,True,law_2025 | income_tax | health_contribution | income_tax | income_tax
+97,ما الإعفاءات أو الاستثناءات في قانون 2025؟,law_2025,law_2025,True,law_2025 | income_tax | health_contribution | income_tax | income_tax
+98,ما الجهة المختصة بتطبيق قانون 2025؟,law_2025,income_tax,True,income_tax | health_contribution | law_2025 | income_tax | income_tax
+99,ما المقصود بالأحكام العامة في قانون 2025؟,law_2025,law_2025,True,law_2025 | health_contribution | income_tax | income_tax | income_tax
+100,كيف يتم تفسير مواد قانون 2025؟,law_2025,income_tax,True,income_tax | law_2025 | health_contribution | income_tax | income_tax

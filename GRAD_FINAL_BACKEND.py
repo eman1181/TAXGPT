@@ -248,16 +248,22 @@ def generate_json_reasoning(prompt, max_new_tokens=700):
         {"role": "user", "content": prompt}
     ]
 
-    # Qwen-native chat formatting
-    input_ids = tokenizer.apply_chat_template(
+    # Build Qwen chat prompt as text first
+    formatted_prompt = tokenizer.apply_chat_template(
         chat,
-        tokenize=True,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+
+    # Then tokenize normally
+    inputs = tokenizer(
+        formatted_prompt,
         return_tensors="pt"
     ).to(llm_model.device)
 
     with torch.no_grad():
         out_ids = llm_model.generate(
-            input_ids,
+            **inputs,
             max_new_tokens=max_new_tokens,
             do_sample=False
         )
@@ -500,11 +506,12 @@ def full_pipeline(user_question, ref_number="—", ref_date="—", top_k=5):
 # In[25]:
 
 
-print(full_pipeline(
-    "ما هو المقصود بنسبة (0.0025) المقررة بالمادة 40 من قانون التأمين الصحي الشامل؟",
-    ref_number="46",
-    ref_date="13/1/2019"
-))
+if __name__ == "__main__":
+    print(full_pipeline(
+        "ما هو المقصود بنسبة (0.0025) المقررة بالمادة 40 من قانون التأمين الصحي الشامل؟",
+        ref_number="46",
+        ref_date="13/1/2019"
+    ))
 
 
 # In[ ]:
